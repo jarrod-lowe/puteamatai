@@ -1,0 +1,53 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    env:
+      GH_TOKEN: ${{ github.token }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Install dependencies
+      run: |
+        npm install
+        
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: '1.5.0'
+        
+    - name: Run environment checks
+      run: make env-check
+      
+    - name: Run language tests
+      run: make test-languages
+      
+    - name: Run development environment tests
+      run: ./tests/test-required-tools.sh
+      
+    - name: Run metadata validation
+      run: make test-metadata
+      
+    - name: Run pipeline validation
+      run: make test-pipelines
