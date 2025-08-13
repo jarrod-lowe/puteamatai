@@ -1,7 +1,7 @@
 # Makefile for PūteaMātai
 # Part of T01.2b - Create Makefile and Tooling Scripts
 
-.PHONY: help env-check env-setup test lint fmt dev build clean
+.PHONY: help env-check env-setup test test-languages test-go test-node test-terraform lint fmt dev build clean
 
 # Default target - show help
 help:
@@ -39,7 +39,7 @@ env-setup:
 	@./scripts/setup-dev-environment.sh
 
 # Testing
-test: env-check
+test: env-check test-languages
 	@echo "🧪 Running all tests..."
 	@echo "Repository protection tests:"
 	@./tests/validate-repo-protections.sh
@@ -48,6 +48,21 @@ test: env-check
 	@./tests/test-required-tools.sh
 	@echo ""
 	@echo "✅ All tests completed"
+
+test-languages: test-go test-node test-terraform
+	@echo "📋 Language test scaffolds completed (Red phase - expected failures)"
+
+test-go:
+	@echo "🔧 Go tests (Red phase):"
+	@cd tests/go && go test || echo "❌ Failed as expected (no go.mod)"
+
+test-node:
+	@echo "📦 Node.js tests (Red phase):"
+	@cd tests/node && npm test || echo "❌ Failed as expected (no package.json)"
+
+test-terraform:
+	@echo "🏗️ Terraform tests (Red phase):"
+	@cd tests/terraform && terraform validate || echo "❌ Failed as expected (no terraform init)"
 
 # Code quality
 lint:
