@@ -1,0 +1,33 @@
+{
+  "name": "puteamatai",
+  "version": "0.1.0",
+  "description": "PūteaMātai - Personal finance tracking and analysis webapp",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest tests/node/",
+    "test:watch": "jest --watch tests/node/",
+    "lint": "eslint .",
+    "fmt": "prettier --write ."
+  },
+  "keywords": [
+    "finance",
+    "aws",
+    "serverless",
+    "typescript",
+    "personal-finance"
+  ],
+  "author": "Jarrod Lowe",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!node_modules/**",
+      "!coverage/**"
+    ]
+  }
+}

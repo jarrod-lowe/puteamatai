@@ -1,20 +1,18 @@
 // T01.3a - Node.js dummy tests that FAIL to define test structure (Red phase)
-// T01.3b will implement the code to make these pass (Green phase)
+// T01.3b - Now implementing functions to make tests pass (Green phase)
 
-// TestAdd tests basic arithmetic - WILL FAIL until add() function is implemented
+const { add, multiply } = require('./functions');
+
+// TestAdd tests basic arithmetic - NOW PASSES with implemented add() function
 test('add function', () => {
     const result = add(2, 3);
     const expected = 5;
     expect(result).toBe(expected);
 });
 
-// TestMultiply tests multiplication - WILL FAIL until multiply() function is implemented  
+// TestMultiply tests multiplication - NOW PASSES with implemented multiply() function  
 test('multiply function', () => {
     const result = multiply(4, 5);
     const expected = 20;
     expect(result).toBe(expected);
 });
-
-// These functions don't exist yet - tests will fail until T01.3b implements them
-// function add(a, b) { }
-// function multiply(a, b) { }

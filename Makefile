@@ -50,19 +50,19 @@ test: env-check test-languages
 	@echo "✅ All tests completed"
 
 test-languages: test-go test-node test-terraform
-	@echo "📋 Language test scaffolds completed (Red phase - expected failures)"
+	@echo "📋 Language test scaffolds completed (Green phase - tests passing!)"
 
 test-go:
-	@echo "🔧 Go tests (Red phase):"
-	@cd tests/go && go test || echo "❌ Failed as expected (no go.mod)"
+	@echo "🔧 Go tests (Green phase):"
+	@cd tests/go && go test
 
 test-node:
-	@echo "📦 Node.js tests (Red phase):"
-	@cd tests/node && npm test || echo "❌ Failed as expected (no package.json)"
+	@echo "📦 Node.js tests (Green phase):"
+	@npm test
 
 test-terraform:
-	@echo "🏗️ Terraform tests (Red phase):"
-	@cd tests/terraform && terraform validate || echo "❌ Failed as expected (no terraform init)"
+	@echo "🏗️ Terraform tests (validation):"
+	@cd tests/terraform && terraform validate
 
 # Code quality
 lint:
