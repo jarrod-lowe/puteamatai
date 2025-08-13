@@ -1,0 +1,39 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+charset = utf-8
+
+# 4 space indentation
+[*.{js,ts,json,yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Go uses tabs
+[*.go]
+indent_style = tab
+indent_size = 4
+
+# Markdown can have trailing spaces for line breaks
+[*.md]
+trim_trailing_whitespace = false
+
+# Makefile uses tabs
+[Makefile]
+indent_style = tab
+
+# Terraform files
+[*.tf]
+indent_style = space
+indent_size = 2
+
+# Shell scripts
+[*.sh]
+indent_style = space  
+indent_size = 4
