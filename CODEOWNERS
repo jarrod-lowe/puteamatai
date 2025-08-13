@@ -1,0 +1,19 @@
+# CODEOWNERS file for PūteaMātai
+# This file defines code ownership for repository protection rules
+# Global code owners - require review from these users for all changes
+
+# Global ownership
+* @jarrod-lowe
+
+# Infrastructure and security-critical files require additional review
+/terraform/ @jarrod-lowe
+/scripts/ @jarrod-lowe
+/.github/ @jarrod-lowe
+/CLAUDE.md @jarrod-lowe
+/CODEOWNERS @jarrod-lowe
+
+# Backend data access layer - critical for data integrity
+/backend/data/ @jarrod-lowe
+
+# Security and authentication components
+/backend/auth/ @jarrod-lowe
