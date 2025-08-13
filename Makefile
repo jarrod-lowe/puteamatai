@@ -15,6 +15,8 @@ help:
 	@echo "  test         Run all tests"
 	@echo "  test-metadata Validate project metadata and structure"
 	@echo "  test-pipelines Validate GitHub Actions pipeline setup"
+	@echo "  test-ci-rules  Validate CI test rules and enforcement policies"
+	@echo "  test-ci-workflows Validate CI workflows meet T01.5b requirements"
 	@echo "  lint         Run linters for all languages"
 	@echo "  fmt          Format code in all languages"
 	@echo "  dev          Start development environment"
@@ -76,6 +78,14 @@ test-metadata:
 test-pipelines:
 	@echo "🚀 GitHub Actions pipeline validation:"
 	@./tests/validate-github-pipelines.sh
+
+test-ci-rules:
+	@echo "🤖 CI test rules validation:"
+	@./tests/validate-ci-test-rules.sh
+
+test-ci-workflows:
+	@echo "🤖 CI workflows validation (T01.5b):"
+	@./tests/validate-ci-workflows.sh
 
 # Code quality
 lint:

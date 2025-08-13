@@ -7,11 +7,9 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  # Environment validation job - runs first
+  environment-check:
     runs-on: ubuntu-latest
-    
-    env:
-      GH_TOKEN: ${{ github.token }}
     
     steps:
     - name: Checkout code
@@ -28,26 +26,86 @@ jobs:
       with:
         go-version: '1.21'
         
-    - name: Install dependencies
-      run: |
-        npm install
-        
     - name: Install Terraform
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_version: '1.5.0'
         
+    - name: Install dependencies
+      run: npm install
+        
     - name: Run environment checks
       run: make env-check
+
+  # Go tests job - runs in parallel with other language tests
+  go-tests:
+    runs-on: ubuntu-latest
+    needs: environment-check
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
       
-    - name: Run language tests
-      run: make test-languages
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Run Go tests
+      run: make test-go
+
+  # Node.js tests job - runs in parallel with other language tests  
+  node-tests:
+    runs-on: ubuntu-latest
+    needs: environment-check
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
       
-    - name: Run development environment tests
-      run: ./tests/test-required-tools.sh
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm install
+        
+    - name: Run Node.js tests
+      run: make test-node
+
+  # Terraform tests job - runs in parallel with other language tests
+  terraform-tests:
+    runs-on: ubuntu-latest  
+    needs: environment-check
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: '1.5.0'
+        
+    - name: Run Terraform tests
+      run: make test-terraform
+
+  # Metadata validation job - runs after language tests
+  metadata-validation:
+    runs-on: ubuntu-latest
+    needs: [go-tests, node-tests, terraform-tests]
+    
+    env:
+      GH_TOKEN: ${{ github.token }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
       
     - name: Run metadata validation
       run: make test-metadata
       
-    - name: Run pipeline validation
+    - name: Run pipeline validation  
       run: make test-pipelines
