@@ -40,8 +40,11 @@ jobs:
     - name: Run environment checks
       run: make env-check
       
-    - name: Run all tests
-      run: make test
+    - name: Run language tests
+      run: make test-languages
+      
+    - name: Run development environment tests
+      run: ./tests/test-required-tools.sh
       
     - name: Run metadata validation
       run: make test-metadata
