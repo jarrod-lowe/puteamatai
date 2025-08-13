@@ -42,12 +42,7 @@ gh api --method PUT \
     "contexts": []
   },
   "enforce_admins": true,
-  "required_pull_request_reviews": {
-    "required_approving_review_count": 1,
-    "dismiss_stale_reviews": true,
-    "require_code_owner_reviews": true,
-    "require_last_push_approval": false
-  },
+  "required_pull_request_reviews": null,
   "restrictions": null,
   "allow_force_pushes": false,
   "allow_deletions": false
@@ -72,7 +67,7 @@ echo "🏷️ Setting repository metadata..."
 
 # Set repository description and ensure public visibility
 gh repo edit --description "PūteaMātai - Personal finance tracking and analysis webapp with predictive analytics" \
-             --visibility public
+             --visibility public --accept-visibility-change-consequences
 
 # Add topics
 gh repo edit --add-topic "finance" \

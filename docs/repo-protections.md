@@ -11,9 +11,8 @@ Repository protections ensure code quality, security, and collaboration standard
 ### Branch Protection (main branch)
 
 1. **Pull Request Reviews**
-   - Minimum 1 approving review required
-   - Dismiss stale reviews when new commits are pushed
-   - Require review from code owners (via CODEOWNERS file)
+   - Disabled for solo development phase
+   - Can be re-enabled when team grows by updating protection scripts
 
 2. **Status Checks**
    - Require status checks to pass before merging

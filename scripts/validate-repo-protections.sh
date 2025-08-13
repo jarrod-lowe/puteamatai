@@ -53,20 +53,15 @@ echo "📋 Validating branch protection rules..."
 # Main branch protection rules
 MAIN_BRANCH="main"
 
-# 1. Require pull request reviews
-check_protection "PR reviews required" \
-    "gh api repos/${REPO_OWNER}/${REPO_NAME}/branches/${MAIN_BRANCH}/protection --jq .required_pull_request_reviews.required_approving_review_count" \
-    "[1-9]"
-
-# 2. Dismiss stale reviews
-check_protection "Dismiss stale reviews" \
-    "gh api repos/${REPO_OWNER}/${REPO_NAME}/branches/${MAIN_BRANCH}/protection --jq .required_pull_request_reviews.dismiss_stale_reviews" \
-    "true"
-
-# 3. Require review from code owners
-check_protection "Code owner reviews" \
-    "gh api repos/${REPO_OWNER}/${REPO_NAME}/branches/${MAIN_BRANCH}/protection --jq .required_pull_request_reviews.require_code_owner_reviews" \
-    "true"
+# 1. PR reviews disabled for solo development
+echo -n "Checking PR reviews disabled... "
+PR_REVIEWS=$(gh api repos/${REPO_OWNER}/${REPO_NAME}/branches/${MAIN_BRANCH}/protection --jq '.required_pull_request_reviews // "null"')
+if [[ "$PR_REVIEWS" == "null" ]]; then
+    echo -e "${GREEN}✓ (Solo development mode)${NC}"
+else
+    echo -e "${RED}✗ PR reviews should be disabled for solo development${NC}"
+    ((FAILURES++))
+fi
 
 # 4. Require status checks
 check_protection "Status checks required" \
