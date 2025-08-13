@@ -12,9 +12,8 @@ linters:
   enable:
     - asciicheck      # Check for non-ASCII characters
     - bodyclose       # Check HTTP response body is closed
-    - deadcode        # Find unused code
     - errcheck        # Check for unchecked errors
-    - exportloopref   # Check for pointers to enclosing loop variables
+    - copyloopvar     # Check for pointers to enclosing loop variables (replaces exportloopref)
     - goconst         # Find repeated strings that could be constants
     - gocyclo         # Compute cyclomatic complexities
     - gofmt           # Check if code is gofmt-ed
@@ -30,12 +29,10 @@ linters:
     - nolintlint      # Report ill-formed or insufficient nolint directives
     - revive          # Fast, configurable, extensible, flexible, and beautiful linter for Go
     - staticcheck     # It's a set of rules from staticcheck
-    - structcheck     # Find unused struct fields
     - typecheck       # Like the front-end of a Go compiler, parses and type-checks Go code
     - unconvert       # Remove unnecessary type conversions
     - unparam         # Report unused function parameters
-    - unused          # Check for unused constants, variables, functions and types
-    - varcheck        # Find unused global variables and constants
+    - unused          # Check for unused constants, variables, functions and types (replaces deadcode, structcheck, varcheck)
     - whitespace      # Detection of leading and trailing whitespace
 
   disable:
@@ -63,10 +60,9 @@ linters-settings:
   
   revive:
     rules:
-      - name: exported-function
-      - name: exported-var
-      - name: package-comments
+      - name: exported
       - name: var-naming
+      - name: package-comments
       - name: function-result-limit
         arguments: [3]
   
@@ -96,6 +92,11 @@ issues:
     
     # Don't report issues in vendor directories
     - path: vendor/
+      linters:
+        - all
+    
+    # Don't report issues in linter test samples (intentionally bad code)
+    - path: tests/linter-samples/
       linters:
         - all
 
