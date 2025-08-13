@@ -92,10 +92,51 @@ jobs:
     - name: Run Terraform tests
       run: make test-terraform
 
-  # Metadata validation job - runs after language tests
+  # Linting job - runs in parallel with language tests
+  linting:
+    runs-on: ubuntu-latest
+    needs: environment-check
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: '1.5.0'
+        
+    - name: Install Node.js dependencies
+      run: npm install
+      
+    - name: Install golangci-lint
+      uses: golangci/golangci-lint-action@v3
+      with:
+        version: latest
+        
+    - name: Install tflint
+      uses: terraform-linters/setup-tflint@v4
+      with:
+        tflint_version: latest
+        
+    - name: Run all linters
+      run: make lint
+
+  # Metadata validation job - runs after language tests and linting
   metadata-validation:
     runs-on: ubuntu-latest
-    needs: [go-tests, node-tests, terraform-tests]
+    needs: [go-tests, node-tests, terraform-tests, linting]
     
     env:
       GH_TOKEN: ${{ github.token }}
