@@ -1,7 +1,7 @@
 # Makefile for PūteaMātai
 # Part of T01.2b - Create Makefile and Tooling Scripts
 
-.PHONY: help env-check env-setup test test-languages test-go test-node test-terraform test-metadata lint fmt dev build clean
+.PHONY: help env-check env-setup test test-languages test-go test-node test-terraform test-metadata test-pipelines lint fmt dev build clean
 
 # Default target - show help
 help:
@@ -14,6 +14,7 @@ help:
 	@echo "Development:"
 	@echo "  test         Run all tests"
 	@echo "  test-metadata Validate project metadata and structure"
+	@echo "  test-pipelines Validate GitHub Actions pipeline setup"
 	@echo "  lint         Run linters for all languages"
 	@echo "  fmt          Format code in all languages"
 	@echo "  dev          Start development environment"
@@ -71,6 +72,10 @@ test-terraform:
 test-metadata:
 	@echo "📋 Project metadata validation:"
 	@./tests/validate-project-metadata.sh
+
+test-pipelines:
+	@echo "🚀 GitHub Actions pipeline validation:"
+	@./tests/validate-github-pipelines.sh
 
 # Code quality
 lint:
