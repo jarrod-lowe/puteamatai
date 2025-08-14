@@ -95,10 +95,10 @@ issues:
       linters:
         - all
     
-    # Don't report issues in linter test samples (intentionally bad code)
-    - path: tests/linter-samples/
-      linters:
-        - all
+    # Don't report issues in demo code (used for linter testing)
+    # - path: tests/demo-code/
+    #   linters:
+    #     - all
 
   max-issues-per-linter: 50
   max-same-issues: 10

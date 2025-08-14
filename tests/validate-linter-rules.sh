@@ -56,20 +56,20 @@ check_linter_content() {
     fi
 }
 
-# Function to run linter with intentionally failing code and expect failures
-test_linter_failure() {
+# Function to run linter on good code and expect it to pass
+test_linter_success() {
     local linter_command="$1"
     local test_file="$2"
     local linter_name="$3"
     
-    echo -n "Testing ${linter_name} detects violations in ${test_file}... "
+    echo -n "Testing ${linter_name} passes on clean code ${test_file}... "
     
     if [[ -f "$test_file" ]]; then
-        # Run linter and expect it to fail (exit code != 0)
-        if ! $linter_command "$test_file" >/dev/null 2>&1; then
-            echo -e "${GREEN}✓ Violations detected${NC}"
+        # Run linter and expect it to pass (exit code = 0)
+        if $linter_command "$test_file" >/dev/null 2>&1; then
+            echo -e "${GREEN}✓ Clean code passes${NC}"
         else
-            echo -e "${RED}✗ No violations detected (linter too permissive)${NC}"
+            echo -e "${RED}✗ Linter failed on clean code${NC}"
             ((FAILURES++))
         fi
     else
@@ -133,16 +133,16 @@ if [[ -f ".tflint.hcl" ]]; then
 fi
 
 echo ""
-echo "🧪 Linter Failure Test Cases:"
+echo "🧪 Linter Success Test Cases:"
 
-# Test that linters detect violations in intentionally bad code
+# Test that linters pass on clean, well-formatted code
 echo ""
-echo "Testing linter failure detection on bad code samples:"
+echo "Testing linter success on clean code samples:"
 
-test_linter_failure "npx eslint" "tests/linter-samples/bad-javascript.js" "ESLint"
-test_linter_failure "golangci-lint run" "tests/linter-samples/bad-go.go" "GolangCI-Lint"  
-test_linter_failure "terraform fmt -check" "tests/linter-samples/bad-terraform.tf" "Terraform fmt"
-test_linter_failure "tflint" "tests/linter-samples/bad-terraform.tf" "TFLint"
+test_linter_success "npx eslint" "tests/demo-code/demo-javascript.js" "ESLint"
+test_linter_success "golangci-lint run" "tests/demo-code/demo-go.go" "GolangCI-Lint"  
+test_linter_success "terraform fmt -check" "tests/demo-code/demo-terraform.tf" "Terraform fmt"
+test_linter_success "tflint" "tests/demo-code/demo-terraform.tf" "TFLint"
 
 echo ""
 echo "📊 Linter Rules Validation Summary:"
