@@ -19,6 +19,7 @@ help:
 	@echo "  test-ci-workflows Validate CI workflows meet T01.5b requirements"
 	@echo "  test-linter-rules Validate linter rule configurations (T01.6a)"
 	@echo "  test-linter-integration Validate linter integration with make/CI (T01.6b)"
+	@echo "  test-typescript-compilation Validate TypeScript compilation process (T01.9a)"
 	@echo "  lint         Run linters for all languages"
 	@echo "  fmt          Format code in all languages"
 	@echo "  dev          Start development environment"
@@ -97,6 +98,10 @@ test-linter-integration:
 	@echo "🔧 Linter integration validation (T01.6b):"
 	@./tests/validate-linter-integration.sh
 
+test-typescript-compilation:
+	@echo "🔄 TypeScript compilation validation (T01.9a):"
+	@./tests/validate-typescript-compilation.sh
+
 # Code quality
 lint: lint-go lint-js lint-tf lint-md
 	@echo "✅ All linting completed successfully!"
@@ -117,12 +122,12 @@ lint-go:
 	fi
 
 lint-js:
-	@echo "📦 JavaScript/TypeScript linting:"
-	@if find . -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" | grep -v node_modules | grep -q .; then \
-		echo "Running ESLint..."; \
-		npx eslint . --ext .js,.ts,.jsx,.tsx --ignore-path .gitignore || echo "ESLint found issues"; \
+	@echo "📦 TypeScript/JavaScript linting:"
+	@if find . -name "*.ts" -o -name "*.js" -o -name "*.tsx" -o -name "*.jsx" | grep -v node_modules | grep -v dist | grep -q .; then \
+		echo "Running ESLint on TypeScript/JavaScript files..."; \
+		npx eslint . --ext .ts,.js,.tsx,.jsx --ignore-path .gitignore || echo "ESLint found issues"; \
 	else \
-		echo "ℹ️  No JS/TS files found, skipping JavaScript linting"; \
+		echo "ℹ️  No TypeScript/JavaScript files found, skipping linting"; \
 	fi
 
 lint-tf:
@@ -167,24 +172,34 @@ dev: env-check
 	@# docker-compose up -d
 
 # Build
-build: env-check
-	@echo "🏗️  Building all components..."
-	@echo "Backend build: (when Go code exists)"
-	@# go build ./...
-	@echo "Frontend build: (when TS code exists)"
-	@# npm run build
-	@echo "ℹ️  Build targets will be implemented as code is added"
+build: env-check build-ts build-go
+	@echo "✅ All components built successfully!"
+
+build-ts:
+	@echo "📦 TypeScript build:"
+	@npm run build
+	@echo "TypeScript compilation completed"
+
+build-go:
+	@echo "🔧 Go build:"
+	@if find . -name "*.go" -not -path "./vendor/*" -not -path "./dist/*" | grep -q .; then \
+		echo "Building Go binaries..."; \
+		go build -o dist/puteamatai ./main.go; \
+		echo "Go build completed"; \
+	else \
+		echo "ℹ️  No Go main package found, skipping Go build"; \
+	fi
 
 # Clean
 clean:
 	@echo "🧹 Cleaning build artifacts..."
-	@echo "Go clean: (when Go code exists)"
-	@# go clean ./...
-	@echo "Node clean: (when Node code exists)"
-	@# rm -rf node_modules dist
-	@echo "Docker clean: (when Docker setup exists)"
-	@# docker-compose down -v
-	@echo "ℹ️  Clean targets will be implemented as code is added"
+	@echo "TypeScript clean:"
+	@rm -rf dist/
+	@echo "Go clean:"
+	@go clean ./...
+	@echo "Node modules clean (use with caution):"
+	@# rm -rf node_modules
+	@echo "✅ Build artifacts cleaned"
 
 # Infrastructure
 tf-plan:

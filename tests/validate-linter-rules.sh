@@ -139,7 +139,7 @@ echo "🧪 Linter Success Test Cases:"
 echo ""
 echo "Testing linter success on clean code samples:"
 
-test_linter_success "npx eslint" "tests/demo-code/demo-javascript.js" "ESLint"
+test_linter_success "npx eslint" "tests/demo-code/demo-typescript.ts" "ESLint on TypeScript"
 test_linter_success "golangci-lint run" "tests/demo-code/demo-go.go" "GolangCI-Lint"  
 test_linter_success "terraform fmt -check" "tests/demo-code/demo-terraform.tf" "Terraform fmt"
 test_linter_success "tflint" "tests/demo-code/demo-terraform.tf" "TFLint"
