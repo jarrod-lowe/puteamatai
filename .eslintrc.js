@@ -7,9 +7,9 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    '@typescript-eslint/recommended',
+    // '@typescript-eslint/recommended', // Disabled until TypeScript plugin is available
   ],
-  parser: '@typescript-eslint/parser',
+  // parser: '@typescript-eslint/parser', // Disabled until TypeScript plugin is available
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',

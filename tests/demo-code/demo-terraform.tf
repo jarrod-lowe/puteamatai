@@ -1,5 +1,19 @@
 # demo-terraform.tf - Demonstrates Terraform formatting and linting compliance
 
+terraform {
+  required_version = ">= 1.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
+    }
+  }
+}
+
 variable "environment" {
   description = "Environment name for resource tagging"
   type        = string
@@ -10,10 +24,6 @@ variable "project" {
   description = "Project name for resource tagging"
   type        = string
   default     = "puteamatai"
-}
-
-data "aws_availability_zones" "available" {
-  state = "available"
 }
 
 resource "aws_instance" "demo_example" {

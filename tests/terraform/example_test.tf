@@ -1,6 +1,10 @@
 # T01.3a - Terraform dummy tests that FAIL to define test structure (Red phase)
 # T01.3b will implement the actual Terraform modules to make these pass (Green phase)
 
+terraform {
+  required_version = ">= 1.0"
+}
+
 # Test that will FAIL - expects a DynamoDB table that doesn't exist yet
 resource "terraform_data" "test_dynamodb_table" {
   provisioner "local-exec" {
