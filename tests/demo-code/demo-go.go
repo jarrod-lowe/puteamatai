@@ -11,7 +11,7 @@ import (
 func DemoFunction() {
 	x := 5
 	fmt.Printf("Value: %d\n", x)
-	
+
 	// Proper error handling
 	file, err := os.Open("example.txt")
 	if err != nil {
@@ -19,7 +19,7 @@ func DemoFunction() {
 		return
 	}
 	defer file.Close()
-	
+
 	// Efficient string concatenation
 	var result strings.Builder
 	for i := 0; i < 100; i++ {
